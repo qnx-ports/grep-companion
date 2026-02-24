@@ -1,0 +1,32 @@
+# Maintainer: Leo Shen <yishen@qnx.com>
+pkgname=grep
+pkgver=3.11
+pkgrel=1
+arch="all"
+pkgdesc="Searches input files for lines containing a match to a specified pattern"
+url="https://www.gnu.org/software/grep/grep.html"
+license="GPL-3.0-or-later"
+depends="qnx-io-sock pcre2"
+makedepends="qnx-io-sock-dev pcre2-dev "
+subpackages="$pkgname-doc"
+source="https://mirrors.kernel.org/gnu/grep/grep-$pkgver.tar.xz"
+
+build() {
+    export LDFLAGS="-lregex"
+    ./configure \
+        --build="$CBUILD" \
+        --host="$CHOST" \
+        --prefix=/usr \
+        --bindir=/usr/bin \
+        --mandir=/usr/share/man \
+        --disable-nls
+    make
+}
+
+package() {
+    make DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+f254a1905a08c8173e12fbdd4fd8baed9a200217fba9d7641f0d78e4e002c1f2a621152d67027d9b25f0bb2430898f5233dc70909d8464fd13d7dd9298e65c42  grep-3.11.tar.xz
+"
